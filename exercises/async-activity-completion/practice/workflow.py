@@ -12,9 +12,11 @@ class GreetingComposer:
     @activity.defn
     async def compose_greeting(self):
         print("Completing activity asynchronously")
-        # TODO Part A: Call `asyncio.create_task(self.complete_greeting())`.
+        # DONE Part A: Call `asyncio.create_task(self.complete_greeting())`.
         # Don't forget to pass `activity.info().task_token` to `complete_greeting()`.
-        # TODO Part B: Call `activity.raise_complete_async()` at the end of this method.
+        # DONE Part B: Call `activity.raise_complete_async()` at the end of this method.
+        await asyncio.create_task(self.complete_greeting(activity.info().task_token))
+        await activity.raise_complete_async()
 
     async def complete_greeting(self, task_token: bytes) -> None:
         handle = self.client.get_async_activity_handle(task_token=task_token)
@@ -22,7 +24,13 @@ class GreetingComposer:
         # due to the `heartbeat_timeout` of 2 seconds configured below.
         # You can use `handle.heartbeat()` and `asyncio.sleep(1)`.
         # After a few heartbeats, call `handle.complete()`.
-
+        n_loops = 4
+        for i in range(n_loops):
+            await handle.heartbeat()
+            print(f'Waiting 1 second. Wait counter: {i} of {n_loops}')
+            await asyncio.sleep(1)
+        await handle.complete()
+        print('Activity complete')
 
 @workflow.defn
 class MyWorkflow:

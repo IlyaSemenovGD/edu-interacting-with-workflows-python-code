@@ -31,7 +31,7 @@ class MyWorkflow:
                 self._current_state = "completed"
                 return greetings
 
-    # TODO Part A: Define a query function called `current_state_query()`.
+    # DONE Part A: Define a query function called `current_state_query()`.
     # It should be annotated with @workflow.query and return self._current_state.
     @workflow.query
     def current_state_query(self) -> str:
